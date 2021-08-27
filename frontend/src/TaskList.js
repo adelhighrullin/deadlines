@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
+
 export default class TaskList extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      openModal: false,
+      chosenTask: this.props.chosenTask,
+      modal: false,
       tasks: [],
     };
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentDidMount() {
@@ -25,69 +26,98 @@ export default class TaskList extends Component {
       .catch((err) => console.log(err));
   };
 
-  handleCloseModal = () => {
-    this.setState({ openModal: false });
-  }
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    const taskOnChange = this.state.chosenTask;
+    taskOnChange[name] = event.target.type === 'checkbox' ? event.target.checked : value;
+    this.setState({ chosenTask: taskOnChange });
+  };
 
-  handleOpenModal = () => {
-    this.setState({ openModal: true });
-  }
+  handleCancel = () => {
+    this.setState({ modal: !this.state.modal });
+    this.refreshList();
+  };
 
-  deleteTask = (task) => {
-    this.setState({ openModal: !this.state.openModal })
+  handleSubmit = (task) => {
+    axios
+      .post(`http://127.0.0.1:8000/api/tasks/`, task, {
+        "headers": {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => this.refreshList())
+      .catch((err) => console.log(err));
+    this.setState({ modal: !this.state.modal });
+  };
+
+  addTask = () => {
+    const newTask = { name: "", description: "", done: false }
+    this.setState({
+      chosenTask: newTask,
+      modal: !this.state.modal
+    });
   };
 
   editTask = (task) => {
-    this.handleOpenModal();
-    console.log("edit clicked");
-    console.log(this.state.openModal);
-    /*
-    return (
-      <div>
-        <Modal
-          isOpen={this.state.openModal}
-        >
-          <p>modal window hehehehlksdjfkjafh</p>
-          <p>this is clicked task name: {task.name}</p>
-          <button onClick={this.handleCloseModal}>close ths windwo</button>
-        </Modal>
-      </div>
-    );
-    */
+    this.setState({
+      chosenTask: task,
+      modal: !this.state.modal
+    });
+  };
+
+  deleteTask = (task) => {
+    axios
+      .delete(`http://localhost:8000/api/tasks/${task.id}/`)
+      .then((res) => this.refreshList())
+      .catch((err) => console.log(err));
   };
 
   renderTasks = () => {
     const getTasks = this.state.tasks;
-
     return getTasks.map((task) => (
       <div>
         <p>{task.name}</p>
         <p>{task.description}</p>
         <button onClick={() => this.editTask(task)}>Edit</button>
-        <Modal
-          isOpen={this.state.openModal}
-        >
-          <p>modal window hehehehlksdjfkjafh</p>
-          <p>this is clicked task name: {task.name}</p>
-          <button onClick={this.handleCloseModal}>close ths windwo</button>
-        </Modal>
         <button onClick={() => this.deleteTask(task)}>Delete</button>
-      </div>
+      </div >
     ));
-  }
+  };
 
   render() {
     return (
       <div className="TaskList">
         <p>Task List</p>
+        <button onClick={this.addTask}>Add task</button>
         {this.renderTasks()}
-        <button onClick={this.handleOpenModal}>faihroieuqhibf</button>
-        <Modal
-          isOpen={this.state.openModal}
-        >
-          <p>slkdjfsldfkjsdf test test etst</p>
-          <button onClick={this.handleCloseModal}></button>
-        </Modal>
+        {
+          this.state.modal ? (
+            <Modal isOpen={this.state.modal}>
+              <input
+                type="text"
+                name="name"
+                value={this.state.chosenTask.name}
+                placeholder="Task name:"
+                onChange={this.handleChange}
+              />
+              <input
+                type="text"
+                name="description"
+                value={this.state.chosenTask.description}
+                placeholder="Description:"
+                onChange={this.handleChange}
+              />
+              <input
+                type="checkbox"
+                name="done"
+                value={this.state.chosenTask.done}
+                onChange={this.handleChange}
+              />
+              <button onClick={() => this.handleSubmit(this.state.chosenTask)}>submit</button>
+              <button onClick={this.handleCancel}>cancel</button>
+            </Modal>
+          ) : null
+        }
       </div>
     );
   }
