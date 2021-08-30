@@ -75,7 +75,7 @@ export default class TaskList extends Component {
   renderTasks = () => {
     const getTasks = this.state.tasks;
     return getTasks.map((task) => (
-      <div>
+      <div className="Task">
         <p>{task.name}</p>
         <p>{task.description}</p>
         <button onClick={() => this.editTask(task)}>Edit</button>
@@ -92,7 +92,7 @@ export default class TaskList extends Component {
         {this.renderTasks()}
         {
           this.state.modal ? (
-            <Modal isOpen={this.state.modal}>
+            <Modal className="Modal" isOpen={this.state.modal}>
               <input
                 type="text"
                 name="name"
