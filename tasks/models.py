@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.fields import DateTimeField
+from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 
 # Create your models here.
@@ -11,3 +12,6 @@ class Task(models.Model):
 
   def __str__(self):
     return self.name
+
+class CustomUser(AbstractUser):
+  status = models.CharField(max_length=200, default='')

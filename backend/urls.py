@@ -27,4 +27,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     # url(r'api/tasks', views.TaskView.as_view()),
+    path('tokens/', include('tasks.urls')),
 ]

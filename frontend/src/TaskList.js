@@ -99,20 +99,20 @@ export default class TaskList extends Component {
                 value={this.state.chosenTask.name}
                 placeholder="Task name:"
                 onChange={this.handleChange}
-              />
+              /><br/>
               <input
                 type="text"
                 name="description"
                 value={this.state.chosenTask.description}
                 placeholder="Description:"
                 onChange={this.handleChange}
-              />
+              /><br/>
               <input
                 type="checkbox"
                 name="done"
                 value={this.state.chosenTask.done}
                 onChange={this.handleChange}
-              />
+              /><br/>
               <button onClick={() => this.handleSubmit(this.state.chosenTask)}>submit</button>
               <button onClick={this.handleCancel}>cancel</button>
             </Modal>

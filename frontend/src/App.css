@@ -12,16 +12,26 @@ body {
   background-color: #686256;
   height: 50%;
   width: 50%;
-  margin: 5%  auto;
+  margin: 5% auto;
+}
+
+.Modal input {
+  margin: 1%;
 }
 
 .Task {
   background-color: #c1502e;
-  box-shadow: 60px;
   width: 40%;
   margin: 1% auto;
   padding: 1%;
   word-wrap: break-word;
+}
+
+.Login {
+  text-align: center;
+  width: 40%;
+  margin: 1% auto;
+  padding: 1%;
 }
 
 button {
@@ -29,7 +39,6 @@ button {
   border: none;
   margin: auto 1%;
   transition-duration: 200ms;
-  
 }
 
 button:hover{
