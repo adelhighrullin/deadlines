@@ -21,7 +21,11 @@ export default class TaskList extends Component {
 
   refreshList = async () => {
     axios
-      .get("http://localhost:8000/api/tasks/")
+      .get("http://localhost:8000/api/tasks/", {
+        headers: {
+          "Authorization": `JWT ${window.localStorage.access_token}`
+        }
+      })
       .then((res) => this.setState({ tasks: res.data }))
       .catch((err) => console.log(err));
   };
@@ -42,6 +46,7 @@ export default class TaskList extends Component {
     axios
       .post(`http://127.0.0.1:8000/api/tasks/`, task, {
         "headers": {
+          "Authorization": `JWT ${window.localStorage.access_token}`,
           "Content-Type": "application/json",
         },
       })
@@ -67,7 +72,11 @@ export default class TaskList extends Component {
 
   deleteTask = (task) => {
     axios
-      .delete(`http://localhost:8000/api/tasks/${task.id}/`)
+      .delete(`http://localhost:8000/api/tasks/${task.id}/`, {
+        headers: {
+          "Authorization": `JWT ${window.localStorage.access_token}`
+        }
+      })
       .then((res) => this.refreshList())
       .catch((err) => console.log(err));
   };
@@ -99,20 +108,20 @@ export default class TaskList extends Component {
                 value={this.state.chosenTask.name}
                 placeholder="Task name:"
                 onChange={this.handleChange}
-              /><br/>
+              /><br />
               <input
                 type="text"
                 name="description"
                 value={this.state.chosenTask.description}
                 placeholder="Description:"
                 onChange={this.handleChange}
-              /><br/>
+              /><br />
               <input
                 type="checkbox"
                 name="done"
                 value={this.state.chosenTask.done}
                 onChange={this.handleChange}
-              /><br/>
+              /><br />
               <button onClick={() => this.handleSubmit(this.state.chosenTask)}>submit</button>
               <button onClick={this.handleCancel}>cancel</button>
             </Modal>
