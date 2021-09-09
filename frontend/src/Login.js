@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const ACCESS_TOKEN = 'access_token';
-const REFRESH_TOKEN = 'refresh_token';
-
 export default class Login extends Component {
 
   constructor(props) {
@@ -29,9 +26,9 @@ export default class Login extends Component {
     axios
       .post("http://localhost:8000/tokens/obtain/", loginBody)
       .then((response) => {
-        window.localStorage.setItem(ACCESS_TOKEN, response.data.access);
+        window.localStorage.setItem('access_token', response.data.access);
         console.log("access token123:", response.data.access);
-        window.localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+        window.localStorage.setItem('refresh_token', response.data.refresh);
         console.log("refresh token123:", response.data.refresh);
       })
       .catch((err) => console.log(err));
@@ -40,8 +37,8 @@ export default class Login extends Component {
   }
 
   handleLogOut = () => {
-    window.localStorage.removeItem(ACCESS_TOKEN);
-    window.localStorage.removeItem(REFRESH_TOKEN);
+    window.localStorage.removeItem('access_token');
+    window.localStorage.removeItem('refresh_token');
     this.setState({ authorized: false });
   }
 
