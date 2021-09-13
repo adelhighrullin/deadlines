@@ -4,12 +4,12 @@ body, button, input {
 }
 
 body {
-  background-color: #686256;
+  background-color: #f7f7f7;
   text-align: center;
 }
 
 .Modal {
-  background-color: #686256;
+  background-color: #f7f7f7;
   height: 50%;
   width: 50%;
   margin: 5% auto;
@@ -20,7 +20,7 @@ body {
 }
 
 .Task {
-  background-color: #c1502e;
+  background-color: #eeeeee;
   width: 40%;
   margin: 1% auto;
   padding: 1%;
@@ -35,13 +35,13 @@ body {
 }
 
 button {
-  background-color: #a96e5b;
+  background-color: #929aab;
   border: none;
   margin: auto 1%;
   transition-duration: 200ms;
 }
 
 button:hover{
-  background-color: #7a3b2e;
+  background-color: #393e46;
   transition-duration: 200ms;
 }
