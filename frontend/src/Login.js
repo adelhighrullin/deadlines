@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Login extends Component {
@@ -13,12 +13,19 @@ export default class Login extends Component {
     }
   }
 
+  componentDidMount() {
+    if (localStorage.getItem('access_token')) {
+      this.setState({authorized: true})
+    }
+  }
+
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value })
   }
 
   handleSubmit = async (event) => {
+    //TODO: create a new component authRequest.js and import it here and in tasklist
     event.preventDefault();
     const loginBody = { username: this.state.login, password: this.state.password }
     console.log(loginBody);
@@ -30,23 +37,19 @@ export default class Login extends Component {
         console.log("access token123:", response.data.access);
         window.localStorage.setItem('refresh_token', response.data.refresh);
         console.log("refresh token123:", response.data.refresh);
+        this.setState({ authorized: true })
       })
       .catch((err) => console.log(err));
-
-    this.setState({ authorized: true });
-  }
-
-  handleLogOut = () => {
-    window.localStorage.removeItem('access_token');
-    window.localStorage.removeItem('refresh_token');
-    this.setState({ authorized: false });
   }
 
   render() {
     return (
       <div>
+        {this.state.authorized
+          ? <Redirect to="/tasklist" />
+          : null}
         <p>this is login page</p>
-        <Link to="/tasklist">Go to TaskList</Link>
+        <Router><Link to="/tasklist">Go to TaskList</Link></Router>
         <form className="Login" onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -64,10 +67,6 @@ export default class Login extends Component {
           /><br />
           <button type="submit">Enter</button>
         </form>
-        {this.state.authorized ?
-          <button onClick={this.handleLogOut}>Log out</button>
-          : null
-        }
       </div>
     );
   }

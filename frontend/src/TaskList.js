@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import Modal from 'react-modal';
 
@@ -27,6 +28,10 @@ authRequest.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
+    if (!localStorage.getItem('access_token')) {
+      window.location.href = '/';
+      return Promise.reject(error);
+    }
     if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
       originalRequest._retry = true;
       console.log('it goes to post now')
@@ -53,12 +58,20 @@ export default class TaskList extends Component {
       isNewTask: false,
       modal: false,
       tasks: [],
+      authorized: true
     };
   }
 
   componentDidMount() {
     this.refreshList();
-  }
+  };
+
+  logOut = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    console.log('now not authorized')
+    this.setState({ authorized: false })
+  };
 
   refreshList = () => {
     authRequest
@@ -134,39 +147,46 @@ export default class TaskList extends Component {
   render() {
     return (
       <div className="TaskList">
-        <p>Task List</p>
-        <button onClick={this.addTask}>Add task</button>
-        {this.renderTasks()}
-        {
-          this.state.modal ? (
-            <Modal className="Modal" isOpen={this.state.modal}>
-              <form onSubmit={() => this.handleSubmit(this.state.chosenTask)}>
-                <input
-                  type="text"
-                  name="name"
-                  value={this.state.chosenTask.name}
-                  placeholder="Task name:"
-                  onChange={this.handleChange}
-                /><br />
-                <input
-                  type="text"
-                  name="description"
-                  value={this.state.chosenTask.description}
-                  placeholder="Description:"
-                  onChange={this.handleChange}
-                /><br />
-                <input
-                  type="checkbox"
-                  name="done"
-                  value={this.state.chosenTask.done}
-                  onChange={this.handleChange}
-                /><br />
-                <button type="submit">submit</button>
-                <button onClick={this.handleCancel}>cancel</button>
-              </form>
-            </Modal>
-          ) : null
+        {!this.state.authorized
+          ? <Redirect to="/" />
+          : <div>
+            <p>Task List</p>
+            <button onClick={this.addTask}>Add task</button>
+            {this.renderTasks()}
+            {
+              this.state.modal ? (
+                <Modal className="Modal" isOpen={this.state.modal}>
+                  <form onSubmit={() => this.handleSubmit(this.state.chosenTask)}>
+                    <input
+                      type="text"
+                      name="name"
+                      value={this.state.chosenTask.name}
+                      placeholder="Task name:"
+                      onChange={this.handleChange}
+                    /><br />
+                    <input
+                      type="text"
+                      name="description"
+                      value={this.state.chosenTask.description}
+                      placeholder="Description:"
+                      onChange={this.handleChange}
+                    /><br />
+                    <input
+                      type="checkbox"
+                      name="done"
+                      value={this.state.chosenTask.done}
+                      onChange={this.handleChange}
+                    /><br />
+                    <button type="submit">submit</button>
+                    <button onClick={this.handleCancel}>cancel</button>
+                  </form>
+                </Modal>
+              ) : null
+            }
+            <button onClick={this.logOut}>Log out</button>
+          </div>
         }
+
       </div>
     );
   }
