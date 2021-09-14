@@ -29,7 +29,6 @@ authRequest.interceptors.response.use(
   async error => {
     const originalRequest = error.config;
     if (!localStorage.getItem('access_token')) {
-      window.location.href = '/';
       return Promise.reject(error);
     }
     if (error.response.status === 401 && error.response.statusText === 'Unauthorized') {
@@ -58,7 +57,6 @@ export default class TaskList extends Component {
       isNewTask: false,
       modal: false,
       tasks: [],
-      authorized: true
     };
   }
 
@@ -70,13 +68,15 @@ export default class TaskList extends Component {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     console.log('now not authorized')
-    this.setState({ authorized: false })
+    authRequest.defaults.headers['Authorization'] = null;
+    window.location.href = '/';
   };
 
   refreshList = () => {
     authRequest
       .get('/api/tasks/')
-      .then((res) => this.setState({ tasks: res.data }))
+      .then(
+        (res) => this.setState({ tasks: res.data }))
       .then(console.log('get requested'))
       .catch((err) => console.log(err));
   };
@@ -147,7 +147,7 @@ export default class TaskList extends Component {
   render() {
     return (
       <div className="TaskList">
-        {!this.state.authorized
+        {!localStorage.getItem('access_token')
           ? <Redirect to="/" />
           : <div>
             <p>Task List</p>

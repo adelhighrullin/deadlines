@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Login extends Component {
@@ -46,10 +46,9 @@ export default class Login extends Component {
     return (
       <div>
         {this.state.authorized
-          ? <Redirect to="/tasklist" />
+          ? <Redirect to="/tasklist"/>
           : null}
-        <p>this is login page</p>
-        <Router><Link to="/tasklist">Go to TaskList</Link></Router>
+        <p>deadlines</p>
         <form className="Login" onSubmit={this.handleSubmit}>
           <input
             type="text"
