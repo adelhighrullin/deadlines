@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Login extends Component {
@@ -9,15 +9,10 @@ export default class Login extends Component {
     this.state = {
       login: '',
       password: '',
-      authorized: false,
+      //authorized: false,
     }
   }
-
-  componentDidMount() {
-    if (localStorage.getItem('access_token')) {
-      this.setState({authorized: true})
-    }
-  }
+  
 
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -37,7 +32,7 @@ export default class Login extends Component {
         console.log("access token123:", response.data.access);
         window.localStorage.setItem('refresh_token', response.data.refresh);
         console.log("refresh token123:", response.data.refresh);
-        this.setState({ authorized: true })
+        //this.setState({ authorized: true })
       })
       .catch((err) => console.log(err));
   }
@@ -45,10 +40,10 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        {this.state.authorized
-          ? <Redirect to="/tasklist"/>
+        {!!localStorage.getItem('access_token')
+          ? <Redirect to="/tasklist" />
           : null}
-        <p>deadlines</p>
+        <p>this is login page</p>
         <form className="Login" onSubmit={this.handleSubmit}>
           <input
             type="text"
