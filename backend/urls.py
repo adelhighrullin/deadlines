@@ -16,16 +16,19 @@ Including another URLconf
 from django import urls
 from django.contrib import admin
 from django.urls import include, path
-from django.conf.urls import url
 from rest_framework import routers
 from tasks import views
 
-router = routers.DefaultRouter()
-router.register(r'tasks', views.TaskView)
+routerTasks = routers.DefaultRouter()
+routerTasks.register(r'tasks', views.TaskView)
+
+routerCustomUsers = routers.DefaultRouter()
+routerCustomUsers.register(r'users', views.CustomUserView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    # url(r'api/tasks', views.TaskView.as_view()),
+    path('api/', include(routerTasks.urls)),
+    path('api/', include(routerCustomUsers.urls)),
+    path('register/', views.CustomUserCreate.as_view(), name="create_user"),
     path('tokens/', include('tasks.urls')),
 ]

@@ -9,7 +9,7 @@ export default class Login extends Component {
     this.state = {
       login: '',
       password: '',
-      //authorized: false,
+      authorized: false,
     }
   }
   
@@ -32,7 +32,7 @@ export default class Login extends Component {
         console.log("access token123:", response.data.access);
         window.localStorage.setItem('refresh_token', response.data.refresh);
         console.log("refresh token123:", response.data.refresh);
-        //this.setState({ authorized: true })
+        this.setState({ authorized: true })
       })
       .catch((err) => console.log(err));
   }
@@ -40,10 +40,10 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        {!!localStorage.getItem('access_token')
+        {!!localStorage.getItem('access_token') || this.state.authorized == true
           ? <Redirect to="/tasklist" />
           : null}
-        <p>this is login page</p>
+        <p>deadlines</p>
         <form className="Login" onSubmit={this.handleSubmit}>
           <input
             type="text"
@@ -61,6 +61,7 @@ export default class Login extends Component {
           /><br />
           <button type="submit">Enter</button>
         </form>
+        <Router>Don't have an account yet? <Link to="/register">Register now.</Link></Router>
       </div>
     );
   }

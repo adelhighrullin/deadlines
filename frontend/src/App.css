@@ -27,7 +27,7 @@ body {
   word-wrap: break-word;
 }
 
-.Login {
+.Login, .Register {
   text-align: center;
   width: 40%;
   margin: 1% auto;

@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.fields import DateTimeField
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
 
@@ -14,4 +13,5 @@ class Task(models.Model):
     return self.name
 
 class CustomUser(AbstractUser):
+  # userTasks = models.ForeignKey(Task)
   status = models.CharField(max_length=200, default='')
