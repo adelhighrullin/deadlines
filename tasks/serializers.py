@@ -1,10 +1,6 @@
 from rest_framework import serializers
+from django.contrib.auth import settings
 from .models import CustomUser, Task
-
-class TaskSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Task
-    fields = ('id', 'name', 'description', 'done')
 
 class CustomUserSerializer(serializers.ModelSerializer):
   email = serializers.EmailField(required=True)
@@ -22,3 +18,21 @@ class CustomUserSerializer(serializers.ModelSerializer):
       instance.set_password(password)
     instance.save()
     return instance
+
+class TaskSerializer(serializers.ModelSerializer):
+  # name = serializers.CharField(required=True)
+  # description = serializers.CharField(required=False)
+  # done = serializers.BooleanField(default=False)
+  # user = CustomUserSerializer
+
+  class Meta:
+    model = Task
+    fields = ('id', 'name', 'description', 'done', 'user')
+
+  # def perform_create(self, serializer):
+  #   serializer.save(user=self.request.user)
+  
+  # def create(self, validated_data):
+  #   instance = self.Meta.model(**validated_data)
+  #   instance.save()
+  #   return instance

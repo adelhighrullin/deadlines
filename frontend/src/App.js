@@ -13,7 +13,7 @@ export default class App extends Component {
         <div className="App">
           <Switch>
             <Route exact path="/" component={Login} />
-            <Route path="/tasklist" component={TaskList} /*render={(props) => <TaskList {...props}/>} */ />
+            <Route path="/tasklist" component={TaskList} />
             <Route path="/register" component={Register} />
           </Switch>
         </div>

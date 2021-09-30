@@ -1,4 +1,3 @@
-import re
 from django.http import HttpResponse
 
 from django.shortcuts import render
@@ -6,11 +5,16 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import TaskSerializer, CustomUserSerializer
-from .models import CustomUser, Task
+from .models import CustomUser
 
 class TaskView(viewsets.ModelViewSet):
   serializer_class = TaskSerializer
-  queryset = Task.objects.all()
+
+  def get_queryset(self):
+    return self.request.user.tasks.all()
+  
+  def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
 
 class CustomUserView(viewsets.ModelViewSet):
   serializer_class = CustomUserSerializer

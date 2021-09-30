@@ -20,7 +20,7 @@ from rest_framework import routers
 from tasks import views
 
 routerTasks = routers.DefaultRouter()
-routerTasks.register(r'tasks', views.TaskView)
+routerTasks.register(r'tasks', views.TaskView, basename="Task")
 
 routerCustomUsers = routers.DefaultRouter()
 routerCustomUsers.register(r'users', views.CustomUserView)

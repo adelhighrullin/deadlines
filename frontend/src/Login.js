@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Login extends Component {
@@ -40,7 +40,7 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        {!!localStorage.getItem('access_token') || this.state.authorized == true
+        {!!localStorage.getItem('access_token') || this.state.authorized === true
           ? <Redirect to="/tasklist" />
           : null}
         <p>deadlines</p>
@@ -61,7 +61,7 @@ export default class Login extends Component {
           /><br />
           <button type="submit">Enter</button>
         </form>
-        <Router>Don't have an account yet? <Link to="/register">Register now.</Link></Router>
+        <p>Don't have an account yet? <Link to="/register">Register now.</Link></p>
       </div>
     );
   }

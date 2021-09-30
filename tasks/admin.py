@@ -5,7 +5,7 @@ from django.contrib import admin
 from .models import Task, CustomUser
 
 class TaskAdmin(admin.ModelAdmin):
-  list_display = ('name', 'description', 'done')
+  list_display = ('name', 'description', 'done', 'user')
 
 class CustomUserAdmin(admin.ModelAdmin):
   model = CustomUser

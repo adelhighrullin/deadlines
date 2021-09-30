@@ -28,6 +28,10 @@ authRequest.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
+    // if (error.response.status === 401 && originalRequest.url === "http://localhost:8000/tokens/refresh/") {
+    //   window.location.href = "/";
+    //   return Promise.reject(error);
+    // }
     if (!localStorage.getItem('access_token')) {
       return Promise.reject(error);
     }
