@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import axios from 'axios';
+
+import { Button, Container, Col, Form, Nav, Navbar, Row } from 'react-bootstrap'
 
 export default class Login extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      login: '',
+      username: '',
       password: '',
       authorized: false,
     }
   }
-  
 
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -22,7 +23,7 @@ export default class Login extends Component {
   handleSubmit = async (event) => {
     //TODO: create a new component authRequest.js and import it here and in tasklist
     event.preventDefault();
-    const loginBody = { username: this.state.login, password: this.state.password }
+    const loginBody = { username: this.state.username, password: this.state.password }
     console.log(loginBody);
 
     axios
@@ -43,13 +44,52 @@ export default class Login extends Component {
         {!!localStorage.getItem('access_token') || this.state.authorized === true
           ? <Redirect to="/tasklist" />
           : null}
-        <p>deadlines</p>
-        <form className="Login" onSubmit={this.handleSubmit}>
+        <Navbar bg="dark" className="mb-3" /*fixed*/ sticky="top">
+          <Container fluid="md">
+            <Navbar.Brand className="text-white">deadlines</Navbar.Brand>
+            <Nav>
+              <Nav.Link className="text-white" as={NavLink} to='/' exact>Login</Nav.Link>
+              <Nav.Link className="text-white" as={NavLink} to='/register' exact>Register</Nav.Link>
+            </Nav>
+          </Container>
+        </Navbar>
+        <Form onSubmit={this.handleSubmit}>
+          <Container fluid>
+            <Row className="justify-content-md-center mb-3">
+              <Col xs="3">
+                <Form.Control
+                  type="text"
+                  name="username"
+                  value={this.state.username}
+                  onChange={this.handleChange}
+                  placeholder="Enter your username:"
+                />
+              </Col>
+            </Row>
+            <Row className="justify-content-md-center mb-3">
+              <Col xs="3">
+                <Form.Control
+                  type="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.handleChange}
+                  placeholder="Enter your password:"
+                />
+              </Col>
+            </Row>
+            <Row className="justify-content-md-center mb-3">
+              <Col xs="3">
+                <Button variant="primary" type="submit">Login</Button>
+              </Col>
+            </Row>
+          </Container>
+        </Form >
+        {/* <form className="Username" onSubmit={this.handleSubmit}>
           <input
             type="text"
-            placeholder="Login:"
-            name="login"
-            value={this.state.login}
+            placeholder="Username:"
+            name="username"
+            value={this.state.username}
             onChange={this.handleChange}
           />
           <input
@@ -60,9 +100,14 @@ export default class Login extends Component {
             onChange={this.handleChange}
           /><br />
           <button type="submit">Enter</button>
-        </form>
-        <p>Don't have an account yet? <Link to="/register">Register now.</Link></p>
-      </div>
+        </form> */}
+
+        <Navbar bg="dark" fixed="bottom" >
+          <Container fluid="md">
+            <Navbar.Brand className="text-white">bottom text 2021</Navbar.Brand>
+          </Container>
+        </Navbar>
+      </div >
     );
   }
 }

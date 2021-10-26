@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
+import { NavLink, Redirect } from 'react-router-dom'
 import axios from 'axios';
 import Modal from 'react-modal';
 
+import { Button, Card, Container, Col, Form, Nav, Navbar, Row } from 'react-bootstrap'
+
 Modal.setAppElement('#root');
 
+const baseURL = "http://localhost:8000/";
+
 const authRequest = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: baseURL,
   headers: {
     'Authorization': `JWT ${localStorage.getItem('access_token')}`,
     'Content-Type': 'application/json',
@@ -20,7 +24,7 @@ authRequest.interceptors.request.use(
     return config;
   },
   error => {
-    Promise.reject(error)
+    return Promise.reject(error)
   }
 );
 
@@ -28,7 +32,8 @@ authRequest.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
-    // if (error.response.status === 401 && originalRequest.url === "http://localhost:8000/tokens/refresh/") {
+    // if (error.response.status === 401 && originalRequest.url === baseURL + "tokens/refresh/") {
+    //   localStorage.clear();
     //   window.location.href = "/";
     //   return Promise.reject(error);
     // }
@@ -94,7 +99,7 @@ export default class TaskList extends Component {
 
   handleCancel = () => {
     this.setState({ modal: !this.state.modal });
-    this.refreshList();
+    // this.refreshList();
   };
 
   handleSubmit = (task) => {
@@ -138,25 +143,41 @@ export default class TaskList extends Component {
 
   renderTasks = () => {
     const getTasks = this.state.tasks;
-    return getTasks.map((task) => (
-      <div className="Task">
-        <p>{task.name}</p>
+    return getTasks.map((task, idx) => (
+      <div key={idx} className="Task">
+        <Card>
+          <Card.Body>
+            <Card.Title>{task.name}</Card.Title>
+            <Card.Text>{task.description}</Card.Text>
+            <Button onClick={() => this.editTask(task)}>Edit</Button>
+            <Button variant="danger" onClick={() => this.deleteTask(task)}>Delete</Button>
+          </Card.Body>
+        </Card>
+        {/* <p>{task.name}</p>
         <p>{task.description}</p>
         <button onClick={() => this.editTask(task)}>Edit</button>
-        <button onClick={() => this.deleteTask(task)}>Delete</button>
+        <button onClick={() => this.deleteTask(task)}>Delete</button> */}
       </div >
     ));
   };
 
   render() {
     return (
-      <div className="TaskList">
+      <div>
         {!localStorage.getItem('access_token')
           ? <Redirect to="/" />
-          : <div>
-            <p>Task List</p>
-            <button onClick={this.addTask}>Add task</button>
+          : <div className="TaskList">
+            <Navbar bg="dark" className="mb-3" /*fixed*/ sticky="top">
+              <Container fluid="md">
+                <Navbar.Brand className="text-white">deadlines</Navbar.Brand>
+                <Nav>
+                  <Button variant="dark" onClick={this.logOut}>Log out</Button>
+                </Nav>
+              </Container>
+            </Navbar>
             {this.renderTasks()}
+            {/* <p>Task List</p>
+            <button onClick={this.addTask}>Add task</button> */}
             {
               this.state.modal ? (
                 <Modal className="Modal" isOpen={this.state.modal}>
@@ -187,7 +208,12 @@ export default class TaskList extends Component {
                 </Modal>
               ) : null
             }
-            <button onClick={this.logOut}>Log out</button>
+            {/* <button onClick={this.logOut}>Log out</button> */}
+            <Navbar bg="dark" fixed="bottom">
+              <Container fluid="md">
+                <Navbar.Brand className="text-white">bottom text 2021</Navbar.Brand>
+              </Container>
+            </Navbar>
           </div>
         }
 
