@@ -47,6 +47,7 @@ export default class Register extends Component {
             </Nav>
           </Container>
         </Navbar>
+        <h1 style={{textAlign: "center"}}>Register</h1>
         <Form onSubmit={this.handleSubmit}>
           <Container fluid>
             <Row className="justify-content-md-center mb-3">

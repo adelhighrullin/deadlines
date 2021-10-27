@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { NavLink, Redirect } from 'react-router-dom'
 import axios from 'axios';
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
 
-import { Button, Card, Container, Col, Form, Nav, Navbar, Row } from 'react-bootstrap'
+import { Button, Card, Container, Col, Form, Modal, Nav, Navbar, Row } from 'react-bootstrap'
 
-Modal.setAppElement('#root');
+// Modal.setAppElement('#root');
 
 const baseURL = "http://localhost:8000/";
 
@@ -99,7 +99,7 @@ export default class TaskList extends Component {
 
   handleCancel = () => {
     this.setState({ modal: !this.state.modal });
-    // this.refreshList();
+    this.refreshList();
   };
 
   handleSubmit = (task) => {
@@ -144,15 +144,23 @@ export default class TaskList extends Component {
   renderTasks = () => {
     const getTasks = this.state.tasks;
     return getTasks.map((task, idx) => (
-      <div key={idx} className="Task">
-        <Card>
-          <Card.Body>
-            <Card.Title>{task.name}</Card.Title>
-            <Card.Text>{task.description}</Card.Text>
-            <Button onClick={() => this.editTask(task)}>Edit</Button>
-            <Button variant="danger" onClick={() => this.deleteTask(task)}>Delete</Button>
-          </Card.Body>
-        </Card>
+      <div key={idx} className="Tasklist">
+        <Container className="mb-5">
+          <Row className="justify-content-md-center mb-3">
+            <Col xs={6} md={4}>
+              <Card>
+                <Card.Body className="text-center">
+                  <Card.Title>{task.name}</Card.Title>
+                  <Card.Text>{task.description}</Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                  <Button className="ml-auto" onClick={() => this.editTask(task)}>Edit</Button>
+                  <Button className="ml-auto" variant="danger" onClick={() => this.deleteTask(task)}>Delete</Button>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
         {/* <p>{task.name}</p>
         <p>{task.description}</p>
         <button onClick={() => this.editTask(task)}>Edit</button>
@@ -175,37 +183,77 @@ export default class TaskList extends Component {
                 </Nav>
               </Container>
             </Navbar>
+            <Container className="text-center mb-3">
+              <Button onClick={this.addTask}>Add task</Button>
+            </Container>
             {this.renderTasks()}
             {/* <p>Task List</p>
             <button onClick={this.addTask}>Add task</button> */}
             {
               this.state.modal ? (
-                <Modal className="Modal" isOpen={this.state.modal}>
-                  <form onSubmit={() => this.handleSubmit(this.state.chosenTask)}>
-                    <input
-                      type="text"
-                      name="name"
-                      value={this.state.chosenTask.name}
-                      placeholder="Task name:"
-                      onChange={this.handleChange}
-                    /><br />
-                    <input
-                      type="text"
-                      name="description"
-                      value={this.state.chosenTask.description}
-                      placeholder="Description:"
-                      onChange={this.handleChange}
-                    /><br />
-                    <input
-                      type="checkbox"
-                      name="done"
-                      value={this.state.chosenTask.done}
-                      onChange={this.handleChange}
-                    /><br />
-                    <button type="submit">submit</button>
-                    <button onClick={this.handleCancel}>cancel</button>
-                  </form>
+                <Modal show={this.state.modal} onHide={this.handleCancel}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Editing</Modal.Title>
+                  </Modal.Header>
+                  <Form onSubmit={() => this.handleSubmit(this.state.chosenTask)}>
+                    <Modal.Body>
+                      <Container>
+                        <Row>
+                          <Col>
+                            <Form.Control
+                              type="text"
+                              name="name"
+                              value={this.state.chosenTask.name}
+                              onChange={this.handleChange}
+                              placeholder="Task name:"
+                            />
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <Form.Control
+                              type="text"
+                              name="description"
+                              value={this.state.chosenTask.description}
+                              onChange={this.handleChange}
+                              placeholder="Description:"
+                            />
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={this.handleCancel}>Cancel</Button>
+                      <Button type="submit">Submit</Button>
+                    </Modal.Footer>
+                  </Form>
                 </Modal>
+                // <Modal className="Modal" isOpen={this.state.modal}>
+                //   <form onSubmit={() => this.handleSubmit(this.state.chosenTask)}>
+                //     <input
+                //       type="text"
+                //       name="name"
+                //       value={this.state.chosenTask.name}
+                //       placeholder="Task name:"
+                //       onChange={this.handleChange}
+                //     /><br />
+                //     <input
+                //       type="text"
+                //       name="description"
+                //       value={this.state.chosenTask.description}
+                //       placeholder="Description:"
+                //       onChange={this.handleChange}
+                //     /><br />
+                //     <input
+                //       type="checkbox"
+                //       name="done"
+                //       value={this.state.chosenTask.done}
+                //       onChange={this.handleChange}
+                //     /><br />
+                //     <button type="submit">submit</button>
+                //     <button onClick={this.handleCancel}>cancel</button>
+                //   </form>
+                // </Modal>
               ) : null
             }
             {/* <button onClick={this.logOut}>Log out</button> */}

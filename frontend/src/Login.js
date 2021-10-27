@@ -53,6 +53,7 @@ export default class Login extends Component {
             </Nav>
           </Container>
         </Navbar>
+        <h1 style={{textAlign: "center"}}>Login</h1>
         <Form onSubmit={this.handleSubmit}>
           <Container fluid>
             <Row className="justify-content-md-center mb-3">
@@ -101,7 +102,6 @@ export default class Login extends Component {
           /><br />
           <button type="submit">Enter</button>
         </form> */}
-
         <Navbar bg="dark" fixed="bottom" >
           <Container fluid="md">
             <Navbar.Brand className="text-white">bottom text 2021</Navbar.Brand>
